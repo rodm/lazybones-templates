@@ -1,0 +1,64 @@
+
+buildscript {
+    repositories {
+        mavenLocal()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath group: 'com.github.rodm', name: 'gradle-teamcity-plugin', version: '0.11'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'com.github.rodm.teamcity-server'
+
+group='${groupId}'
+version='${version}'
+
+ext {
+    vendorName = '${pluginAuthor}'
+    teamcityVersion = '9.0'
+
+    downloadsDir = project.findProperty('downloads.dir') ?: "downloads"
+    serversDir = project.findProperty('servers.dir') ?: "servers"
+    java7Home = project.findProperty('java7.home') ?: '/opt/jdk1.7.0_80'
+    java8Home = project.findProperty('java8.home') ?: '/opt/jdk1.8.0_112'
+}
+
+test {
+    useTestNG()
+}
+
+teamcity {
+    version = teamcityVersion
+
+    server {
+        descriptor {
+            name = project.name
+            displayName = project.name
+            version = project.version
+            vendorName = project.vendorName
+            description = '${pluginDescription'
+            downloadUrl = 'TODO'
+            email = 'TODO'
+            useSeparateClassloader = false
+        }
+    }
+
+    environments {
+        downloadsDir = project.downloadsDir
+        baseHomeDir = project.serversDir
+
+        teamcity9 {
+            version = '9.1.7'
+            javaHome = file(java7Home)
+        }
+
+        teamcity10 {
+            version = '10.0.4'
+            javaHome = file(java8Home)
+        }
+    }
+}

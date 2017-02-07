@@ -1,0 +1,9 @@
+
+# Gradle
+.gradle/
+build/
+
+# Gradle TeamCity Plugin
+data/
+downloads/
+servers/
